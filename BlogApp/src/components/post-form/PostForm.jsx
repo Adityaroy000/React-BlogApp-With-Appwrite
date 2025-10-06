@@ -48,9 +48,9 @@ function PostForm({post}) {
             }
         }
     }
-    const slugTranform = useCallback((value)=>{
+    const slugTransform = useCallback((value)=>{
         if(value && typeof value === 'string'){
-            return value.trim().toLowerCase().replace(/^[a-zA-Z\d\s]+/g, '-').replace(/\s/g, '-')
+            return value.trim().toLowerCase().replace(/[^a-zA-Z\d\s]+/g, '-').replace(/\s+/g, '-')
         }
         return ''
     },[])
@@ -58,14 +58,14 @@ function PostForm({post}) {
     useEffect(()=>{
         const subscription = watch((value,{name})=>{
             if(name === 'title'){
-                const slug = setValue('slug',slugTranform(value.title,{shouldValidate: true}))
+                setValue('slug',slugTransform(value.title,{shouldValidate: true}))
             }
         })
 
         return ()=>{
             subscription.unsubscribe()
         }
-    },[watch, slugTranform, setValue])
+    },[watch, slugTransform, setValue])
   return (
      <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
             <div className="w-2/3 px-2">
