@@ -2,23 +2,23 @@ import React, {useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import {useForm} from'react-hook-form'
 import {Button,Input, Logo} from './index'
-import { Login } from "../store/authSlice"
+import { login } from "../store/authSlice"
 import { useDispatch } from 'react-redux'
 import authService from '../appwrite/auth'
 function Signup() {
     const [error, setError] = useState('')
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const {register, handleSubmit} = useForm()
+    const {register, handleSubmit, formState: { errors }} = useForm()
 
     const create = async(data)=>{
         setError('')
         try {
-            const userData = await authService.createAccount(data)
-            if(userData){
-                const userData = await authService.getCurrentUser()
-                if(userData){
-                    dispatch(Login(userData))
+            const created = await authService.createAccount(data)
+            if(created){
+                const currentUser = await authService.getCurrentUser()
+                if(currentUser){
+                    dispatch(login(currentUser))
                     navigate('/')
                 }
             }
@@ -52,34 +52,39 @@ function Signup() {
                     placeholder="Enter your full name"
                     type="text"
                     {...register("name",{
-                        required: true,
+                        required: "Name is required",
                         minLength: {value: 3, message: "Name should be at least 3 characters long"},
                     })}
                 />
+                {errors.name && <p className="text-red-600 mt-1">{errors.name.message}</p>}
                 <Input 
                     label="Email: "
                     placeholder="Enter your email"
                     type="email"
                     {...register("email",{
-                        required: true,
-                        validate: {
-                            matchPattern: (value) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/.test(value) || "Invalid email address"
+                        required: "Email is required",
+                        pattern: {
+                            // simple, case-insensitive email check
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
+                            message: "Invalid email address"
                         }
                     })}
                 />
+                {errors.email && <p className="text-red-600 mt-1">{errors.email.message}</p>}
                 <Input
                 label="Password: "
                 placeholder="Enter your password"
                 type="password"
                 {...register("password",{
-                    required: true,
+                    required: "Password is required",
                     minLength: {value: 8, message: "Password should be at least 8 characters long"},
-                    matchPattern: {
+                    pattern: {
                         value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
                         message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
                     }
                 })}
                 />
+                {errors.password && <p className="text-red-600 mt-1">{errors.password.message}</p>}
                 <Button type="submit" className='w-full'>Create Account</Button>
             </form>
         </div>

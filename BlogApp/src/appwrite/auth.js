@@ -28,6 +28,7 @@ export class AuthService {
         try{
             return await this.account.createEmailPasswordSession(email, password);
         }catch(error){
+            console.error('AuthService.login error:', error);
             throw error;
         }
     }
@@ -44,7 +45,8 @@ export class AuthService {
 
     async logout(){
         try{
-            return await this.account.deleteSessions();
+            // delete the current session
+            return await this.account.deleteSession('current');
         }catch(error){
             throw error;
         }

@@ -22,7 +22,7 @@ function PostForm({post}) {
             const file = data.image[0]?appwriteService.uploadFile(data.image[0]):null
 
             if(file){
-                appwriteService.deleteFile(post.featuredImageId)
+                appwriteService.deleteFile(post.featuredImage)
             }
             const dbPost = await appwriteService.updatePost(post.$id,{
                 ...data,
@@ -37,7 +37,7 @@ function PostForm({post}) {
 
             if(file){
                 const fileId = file.$id
-                data.featuredImageId = fileId
+                data.featuredImage = fileId
                 const dbPost = await appwriteService.createPost({
                     ...data,
                     userId: userData.$id,

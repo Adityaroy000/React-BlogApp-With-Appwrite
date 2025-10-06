@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
-import { Login as authLogin } from "../store/authSlice"
+import { login as authLogin } from "../store/authSlice"
 import { useDispatch } from 'react-redux'
 import {Button,Input, Logo} from './index'
 import authService from '../appwrite/auth'
@@ -16,14 +16,17 @@ function Login() {
         setErrors("");
         try {
             const session = await authService.login(data)
+            console.log('Login: session', session)
             if(session){
                 const userData = await authService.getCurrentUser()
+                console.log('Login: userData', userData)
                 if(userData){
                     dispatch(authLogin(userData));
                     navigate("/");
                 }
             }
         } catch (error) {
+            console.error('Login error:', error)
             setErrors(error.message);
         }
     }
@@ -53,9 +56,11 @@ function Login() {
                         placeholder="Enter your email"
                         type="email"
                         {...register("email",{
-                            required: true,
-                            validate: {
-                                matchPattern: (value) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/.test(value) || "Invalid email address"
+                            required: "Email is required",
+                            pattern: {
+                                // simple, case-insensitive email check
+                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
+                                message: "Invalid email address"
                             }
                         })}
                     />
