@@ -1,4 +1,3 @@
-import './App.css'
 import { useState,useEffect } from 'react'
 import {Header,Footer} from './components'
 import {useDispatch} from 'react-redux'

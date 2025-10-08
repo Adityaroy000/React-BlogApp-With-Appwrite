@@ -35,23 +35,27 @@ function Header() {
     }
   ]
 
+const headerStyle = {
+  background: 'linear-gradient(160deg, #1C1C1E)'
+}
+
   return (
-    <header className='py-3 shadow bg-gray-500'>
+    <header className='py-3 shadow' style={headerStyle}>
       <Container>
         <nav className='flex'>
           <div className='mr-4'>
             <Link to='/'>
-              <Logo width = '70px'/>
+              <Logo width = '56px'/>
             </Link>
           </div>
-          <ul className='flex ml-auto'>
+          <ul className='flex ml-auto text-white gap-2 justify-center items-center'>
             {
               navItems.map((item)=>
                 item.active? (
                   <li key={item.name}>
                     <button
                       onClick={()=>navigate(item.slug)}
-                      className='inline-block px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
+                      className='inline-block px-6 py-2 duration-200 hover:bg-gray-800 rounded-full bg-gray-700 hover:cursor-pointer'
                     >{item.name}</button>
                   </li>
                 ) : null
