@@ -90,6 +90,7 @@ export class Service {
             )
         }catch(error){
             console.log("appwrite :: getPosts :: error", error);
+            return false;
         }
     }
 
@@ -121,10 +122,14 @@ export class Service {
     }
 
     getFilePreview(fileId){
-        return this.storage.getFilePreview(
-            config.appwriteBucketId,
-            fileId
-        )
+        // The Appwrite SDK's getFilePreview may return a Promise/stream in some environments.
+        // For use directly as an <img src="..." /> in the browser, return a constructed
+        // preview URL string that the browser can fetch.
+        const base = String(config.appwriteUrl).replace(/\/$/, '');
+        // Use the 'view' endpoint which returns the file content and works well as an <img src>
+        // URL-encode the fileId to be safe with special characters.
+        const encodedId = encodeURIComponent(String(fileId));
+        return `${base}/storage/buckets/${config.appwriteBucketId}/files/${encodedId}/view?project=${config.appwriteProjectId}`;
     }
 
 }

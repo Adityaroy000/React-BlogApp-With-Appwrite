@@ -9,10 +9,10 @@ function Logo({ width = '56px'}) {
 
   return (
     <div className='flex items-center'>
-      <div className='flex items-center justify-center bg-gray-100 overflow-hidden' style={containerStyle}>
+      <div className='flex items-center justify-center bg-slate-700 overflow-hidden border border-slate-600' style={containerStyle}>
         <img src={blogLogo} alt="BlogApp logo" style={imgStyle} />
       </div>
-      <span className='text-2xl font-bold text-gray-700 ml-2'></span>
+      <span className='text-2xl font-bold text-slate-100 ml-2'></span>
       {/* <h1 className="text-5xl font-bold bg-gradient-to-t  from-black to-brand-purple bg-clip-text text-transparent">
         BLOG
       </h1> */}
